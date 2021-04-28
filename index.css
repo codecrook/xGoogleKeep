@@ -275,7 +275,8 @@ input:focus {
 }
 
 .toolbar-color,
-.toolbar-delete {
+.toolbar-delete,
+.toolbar-edit {
   height: 20px;
   margin: 0 8px;
   width: 20px;
