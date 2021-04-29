@@ -32,6 +32,7 @@
                 this.handleFormClick(event);
                 this.selectNote(event);
                 this.openModal(event);
+                this.deleteNote(event);
             });
 
             document.body.addEventListener('mouseover', event => {
@@ -68,8 +69,8 @@
                 this.closeForm();
             });
 
-            this.$modalCloseButton.addEventListener('click', event => {
-                this.closeModal(event);
+            this.$modalCloseButton.addEventListener('click', _ => {
+                this.closeModal();
             })
         }
 
@@ -100,6 +101,9 @@
         }
 
         openModal(event) {
+            if (event.target.matches('.toolbar-delete')) return;
+            if (event.target.matches('.toolbar-color')) return;
+
             if (event.target.closest('.note')) {
                 this.$modal.classList.toggle('open-modal');
                 this.$modalTitle.value = this.title;
@@ -107,14 +111,14 @@
             }
         }
 
-        closeModal(event) {
+        closeModal() {
             this.editNote();
             this.$modal.classList.toggle('open-modal');
         }
 
         openTooltip(event) {
             if (!event.target.matches('.toolbar-color')) return;
-            this.id = event.target.dataset.id;
+            this.id = event.target.parentNode.dataset.id;
             const noteCoords = event.target.getBoundingClientRect();
             const horizontal = noteCoords.left;
             const vertical = window.scrollY - 21;
@@ -165,6 +169,15 @@
             this.displayNotes();
         }
 
+        deleteNote(event) {
+            event.stopPropagation();
+            if (!event.target.matches('.toolbar-delete')) return;
+            const { id } = event.target.parentNode.dataset;
+
+            this.notes = this.notes.filter(note => note.id !== Number(id));
+            this.displayNotes();
+        }
+
         displayNotes() {
             const hasNotes = this.notes.length > 0;
             this.$placeholder.style.display = hasNotes ? 'none' : 'flex';
@@ -178,10 +191,10 @@
                     <div class="${note.title && 'note-title'}">${note.title}</div>
                     <div class="note-text">${note.text}</div>
                     <div class="toolbar-container">
-                        <div class="toolbar">
+                        <div class="toolbar" data-id="${note.id}">
                             <img class="toolbar-delete" src="./img/delete.svg">
                             <img class="toolbar-edit" src="./img/edit.svg">
-                            <img class="toolbar-color" data-id="${note.id}" src="./img/palette.svg">
+                            <img class="toolbar-color" src="./img/palette.svg">
                         </div>
                     </div>
                 </div>
