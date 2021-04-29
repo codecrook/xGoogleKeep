@@ -7,7 +7,7 @@
         "/",
         "./index.html",
         "./index.css",
-        "./app.js",
+        "./App.js",
         "./img/delete.svg",
         "./img/edit.svg",
         "./img/lightbulb.svg",
