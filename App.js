@@ -3,7 +3,7 @@
 
     class App {
         constructor() {
-            this.notes = [];
+            this.notes = JSON.parse(localStorage.getItem('notes')) || [];
             this.id = '';
             this.title = '';
             this.text = '';
@@ -24,6 +24,11 @@
             this.$placeholder = document.querySelector('#placeholder');
             this.$notes = document.querySelector('#notes');
 
+            this.init();
+        }
+
+        init() {
+            this.render();
             this.addEventListeners();
         }
 
@@ -140,7 +145,7 @@
             };
 
             this.notes = [...this.notes, newNote];
-            this.displayNotes();
+            this.render();
             this.closeForm();
         }
 
@@ -159,14 +164,14 @@
             const text = this.$modalText.value;
 
             this.notes = this.notes.map(note => note.id === Number(this.id) ? { ...note, title, text } : note);
-            this.displayNotes();
+            this.render();
         }
 
         editNoteColor(color) {
             this.notes = this.notes.map(note =>
                 note.id === Number(this.id) ? { ...note, color } : note
             );
-            this.displayNotes();
+            this.render();
         }
 
         deleteNote(event) {
@@ -175,7 +180,7 @@
             const { id } = event.target.parentNode.dataset;
 
             this.notes = this.notes.filter(note => note.id !== Number(id));
-            this.displayNotes();
+            this.render();
         }
 
         displayNotes() {
@@ -200,6 +205,16 @@
                 </div>
             `).join("");
         }
+
+        saveNotes() {
+            localStorage.setItem('notes', JSON.stringify(this.notes))
+        }
+
+        render() {
+            this.saveNotes();
+            this.displayNotes();
+        }
+
     }
 
     new App();
