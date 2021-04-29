@@ -24,6 +24,8 @@
             this.$placeholder = document.querySelector('#placeholder');
             this.$notes = document.querySelector('#notes');
 
+            this.$installButton = document.querySelector('#install-button');
+
             this.init();
         }
 
@@ -77,7 +79,7 @@
 
             this.$modalCloseButton.addEventListener('click', _ => {
                 this.closeModal();
-            })
+            });
         }
 
         handleFormClick(event) {

@@ -13,6 +13,7 @@
         "./img/lightbulb.svg",
         "./img/palette.svg",
         "./img/post-it.svg",
+        "./img/download.svg",
         "icons/favicon.ico",
         "./icons/apple-icon-57x57.png",
         "./icons/apple-icon-60x60.png",
