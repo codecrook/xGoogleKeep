@@ -7,6 +7,7 @@
             this.id = '';
             this.title = '';
             this.text = '';
+            this.deferredPrompt = null;
 
             this.$noteTitle = document.querySelector('#note-title');
             this.$noteText = document.querySelector('#note-text');
@@ -77,8 +78,30 @@
                 this.closeForm();
             });
 
-            this.$modalCloseButton.addEventListener('click', _ => {
+            this.$modalCloseButton.addEventListener('click', () => {
                 this.closeModal();
+            });
+
+            // for PWA install
+            window.addEventListener('beforeinstallprompt', event => {
+                event.preventDefault();
+                this.deferredPrompt = event;
+                this.$installButton.style.display = 'block';
+
+                // console.log(`'beforeinstallprompt' event was fired.`);
+                this.$installButton.addEventListener('click', async () => {
+                    this.$installButton.style.display = 'none';
+                    this.deferredPrompt.prompt();
+                    const { outcome } = await this.deferredPrompt.userChoice;
+                    console.log(`User response to the install prompt: ${outcome}`);
+                    this.deferredPrompt = null;
+                });
+            });
+
+            window.addEventListener('appinstalled', () => {
+                this.$installButton.style.display = 'none';
+                this.deferredPrompt = null;
+                console.log('PWA was installed');
             });
         }
 
